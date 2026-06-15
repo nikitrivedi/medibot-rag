@@ -30,6 +30,41 @@ flowchart LR
 4. **Retrieval** — analytical questions → SQL RAG; everything else → hybrid RAG (10 retrieve → 3 rerank → LLM).
 5. **Response** — `{ answer, retrieval_type, role, sources }`.
 
+### Document RAG pipeline (hybrid search + reranker)
+
+```mermaid
+flowchart TD
+    Q["User question + role"] --> Chat["POST /api/chat"]
+    Chat --> Route{SQL RAG?}
+    Route -->|No| RAR["retrieve_and_rerank()"]
+
+    subgraph Step1["Step 1 — Hybrid search (Qdrant)"]
+        RAR --> HS["hybrid_search()<br/>top 10 candidates"]
+        HS --> Dense["Dense vector<br/>contextualized_text + MiniLM"]
+        HS --> Sparse["Sparse vector<br/>text + BM25"]
+        Dense --> RRF["RRF fusion"]
+        Sparse --> RRF
+        RBAC["RBAC filter by role"] --> RRF
+        RRF --> C10["10 chunks<br/>hybrid score"]
+    end
+
+    subgraph Step2["Step 2 — Reranker"]
+        C10 --> CE["CrossEncoder<br/>ms-marco-MiniLM-L-6-v2"]
+        CE --> Pairs["Score each pair:<br/>(question, contextualized_text)"]
+        Pairs --> Sort["Sort by rerank_score"]
+        Sort --> C3["Top 3 chunks"]
+    end
+
+    subgraph Step3["Step 3 — Access check + LLM"]
+        C3 --> Deny["_is_access_denied()<br/>uses rerank_score"]
+        Deny -->|Denied| Msg["Access denied message"]
+        Deny -->|Allowed| LLM["Groq LLM"]
+        C3 --> LLM
+        LLM --> Ctx["Context = raw text<br/>of top 3 chunks"]
+        Ctx --> Answer["Answer + sources"]
+    end
+```
+
 ## Prerequisites
 
 - Python 3.11+
