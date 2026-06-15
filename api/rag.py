@@ -17,7 +17,8 @@ ROLE_LABELS = {
     "admin": "admin",
 }
 
-RELEVANCE_THRESHOLD = 0.0
+# Cross-encoder scores on contextualized_text are often negative for domain chunks.
+RELEVANCE_THRESHOLD = -5.0
 
 ANALYTICAL_PATTERN = re.compile(
     r"\b("

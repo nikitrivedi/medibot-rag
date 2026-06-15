@@ -68,6 +68,7 @@ def hybrid_search(query: str, role: str | None = None, top_k: int = 10) -> list[
         results.append({
             "score": point.score,
             "text": point.payload.get("text"),
+            "contextualized_text": point.payload.get("contextualized_text"),
             "source_document": point.payload.get("source_document"),
             "section_title": point.payload.get("section_title"),
             "collection": point.payload.get("collection"),

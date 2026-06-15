@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,7 +9,7 @@ from api.auth import router as auth_router
 from api.chat import router as chat_router
 from api.collections import router as collections_router
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 app = FastAPI(
     title="Medibot RAG API",

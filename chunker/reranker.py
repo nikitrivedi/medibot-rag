@@ -11,8 +11,11 @@ RERANK_K = 3    # narrow list for the LLM
 
 def rerank(query: str, chunks: list[dict], top_k: int = RERANK_K) -> list[dict]:
     model = CrossEncoder(RERANKER_MODEL)
-    # predict the score for each chunk based on the query and the chunk text
-    scores = model.predict([(query, c["text"]) for c in chunks]) # list of scores for each chunk from the cross-encoder model
+    pairs = [
+        (query, chunk.get("contextualized_text") or chunk["text"])
+        for chunk in chunks
+    ]
+    scores = model.predict(pairs)
     ranked = sorted(zip(chunks, scores), key=lambda x: x[1], reverse=True) # sort the chunks by the score in descending order
 
     results = []
