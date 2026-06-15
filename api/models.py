@@ -23,3 +23,8 @@ class ChatResponse(BaseModel):
     retrieval_type: str
     role: str
     sources: list[dict]
+
+
+class CollectionsResponse(BaseModel):
+    role: str
+    collections: list[str]

@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 from api.auth import router as auth_router
 from api.chat import router as chat_router
+from api.collections import router as collections_router
 
 load_dotenv()
 
@@ -29,6 +30,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(chat_router)
+app.include_router(collections_router)
 
 
 @app.get("/health")
