@@ -1,6 +1,17 @@
 # MediBot RAG
 
-Medical chatbot with **hybrid document RAG** (dense + BM25 + rerank), **SQL RAG** for analytics, **RBAC** by role, a **FastAPI** backend, and a **Next.js** frontend.
+MediBot is a **role-aware hospital assistant** for MediAssist staff. Users sign in as a doctor, nurse, billing executive, technician, or admin and ask natural-language questions about hospital operations.
+
+**What it is used for:**
+
+- **Clinical & nursing guidance** — treatment protocols, diagnostic references, ICU procedures, infection control
+- **Billing & claims help** — ICD-10 codes, claim submission steps, pre-auth SLAs, escalation rules
+- **Equipment & general policies** — equipment manuals, leave policy, code of conduct, staff handbook
+- **Claims analytics** — SQL-backed answers for billing/admin roles (e.g. pending claims by department)
+
+Answers are grounded in ingested hospital documents (hybrid RAG) or the claims database (SQL RAG). Access is enforced by role — a doctor cannot read billing-only documents, and only billing executives and admins can run analytics queries.
+
+Built with **hybrid document RAG** (dense + BM25 + rerank), **SQL RAG**, **RBAC**, a **FastAPI** backend, and a **Next.js** frontend.
 
 ## Architecture
 
