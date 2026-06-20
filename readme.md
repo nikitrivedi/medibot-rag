@@ -168,6 +168,7 @@ Restart `npm run dev` after changing `frontend/next.config.ts`.
 |--------|------|------|-------------|
 | `POST` | `/api/login` | No | Returns JWT + role |
 | `POST` | `/api/chat` | Bearer token | Question → RAG answer |
+| `GET`  | `/api/collections/{role}` | No | Document collections accessible to role |
 | `GET`  | `/health` | No | Health check |
 
 **Login**
@@ -185,6 +186,12 @@ curl -X POST http://localhost:8000/api/chat \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"question":"How many claims are pending?","role":"billing_executive"}'
+```
+
+**Collections**
+
+```bash
+curl http://localhost:8000/api/collections/doctor
 ```
 
 ## RBAC collections
